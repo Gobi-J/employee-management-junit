@@ -67,10 +67,10 @@ public class EmployeeController {
    * @throws ForbiddenException if the logged-in user is not retrieving their own details
    */
   @GetMapping("{id}")
-  public ResponseEntity<EmployeeDto> getEmployee(@PathVariable int id, Principal principal)
+  public ResponseEntity<EmployeeDto> getEmployee(@PathVariable int id)
       throws ForbiddenException {
     logger.debug("Getting employee {}", id);
-    return new ResponseEntity<>(employeeService.getEmployee(id, principal.getName()), HttpStatus.OK);
+    return new ResponseEntity<>(employeeService.getEmployee(id), HttpStatus.OK);
   }
 
   /**
@@ -86,7 +86,7 @@ public class EmployeeController {
    * @throws EmployeeException if the employee details are unable to retrieve
    */
   @GetMapping
-  public ResponseEntity<Page<EmployeeDto>> getAllEmployees(@RequestParam(defaultValue = "0") int page,
+  public ResponseEntity<List<EmployeeDto>> getAllEmployees(@RequestParam(defaultValue = "0") int page,
                                                            @RequestParam(defaultValue = "10") int size) {
     logger.debug("Getting all employees");
     return new ResponseEntity<>(employeeService.getAllEmployees(page, size), HttpStatus.OK);

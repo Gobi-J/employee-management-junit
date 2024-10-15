@@ -27,7 +27,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
    * @param pageable Pageable object to get the page details.
    * @return {@link Page<Employee>} Details of the employees in the page.
    */
-  Page<Employee> findAllByIsDeletedFalse(Pageable pageable);
+  List<Employee> findAllByIsDeletedFalse(Pageable pageable);
 
   /**
    * <p>
@@ -69,4 +69,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
    * @return boolean True if the employee exists, else false.
    */
   boolean existsByEmailAndIsDeletedFalse(String email);
+
+  boolean existsByEmail(String email);
 }
