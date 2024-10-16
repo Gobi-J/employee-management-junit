@@ -37,7 +37,7 @@ public class RoleController {
    * @return {@link RoleDto} role details of the employee with http status code 200
    */
   @GetMapping
-  public ResponseEntity<RoleDto> getAccount(@PathVariable int employeeId) {
+  public ResponseEntity<RoleDto> getRole(@PathVariable int employeeId) {
     return new ResponseEntity<>(roleService.getEmployeeRole(employeeId), HttpStatus.OK);
   }
 
@@ -51,7 +51,7 @@ public class RoleController {
    * @return {@link RoleDto} created role details with http status code 201
    */
   @PostMapping
-  public ResponseEntity<RoleDto> createAccount(@PathVariable int employeeId, @Validated @RequestBody RoleDto roleDto) {
+  public ResponseEntity<RoleDto> createRole(@PathVariable int employeeId, @Validated @RequestBody RoleDto roleDto) {
     return new ResponseEntity<>(roleService.addRole(roleDto), HttpStatus.CREATED);
   }
 
@@ -65,7 +65,7 @@ public class RoleController {
    * @return {@link RoleDto} updated role details with http status code 200
    */
   @PutMapping
-  public ResponseEntity<RoleDto> updateAccount(@PathVariable int employeeId, @Validated @RequestBody RoleDto roleDto) {
+  public ResponseEntity<RoleDto> updateRole(@PathVariable int employeeId, @Validated @RequestBody RoleDto roleDto) {
     return new ResponseEntity<>(roleService.updateRole(employeeId, roleDto), HttpStatus.OK);
   }
 
@@ -78,7 +78,7 @@ public class RoleController {
    * @return {@link HttpStatus} status of the operation with http status code 204
    */
   @DeleteMapping
-  public ResponseEntity<HttpStatus> deleteAccount(@PathVariable int employeeId) {
+  public ResponseEntity<HttpStatus> deleteRole(@PathVariable int employeeId) {
     roleService.deleteRole(employeeId);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }

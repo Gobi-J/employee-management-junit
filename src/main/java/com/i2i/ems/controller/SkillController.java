@@ -93,7 +93,7 @@ public class SkillController {
    * @return {@link HttpStatus} http status code 204 if skill is deleted.
    */
   @DeleteMapping
-  public ResponseEntity<HttpStatus> deleteSkill(@PathVariable int employeeId) {
+  public ResponseEntity<HttpStatus> deleteSkills(@PathVariable int employeeId) {
     skillService.deleteSkill(employeeId);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }

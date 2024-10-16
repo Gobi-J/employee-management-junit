@@ -68,11 +68,11 @@ public class AccountService {
     logger.debug("Adding account {}", accountDto.getBankName());
     Account account;
     try {
-      if (null != employeeService.getEmployeeById(employeeId).getAccount()) {
+      Employee employee = employeeService.getEmployeeById(employeeId);
+      if (null != employee.getAccount()) {
         throw new DuplicateKeyException("Account already exists for employee " + employeeId);
       }
       account = saveAccount(AccountMapper.dtoToModel(accountDto));
-      Employee employee = employeeService.getEmployeeById(employeeId);
       employee.setAccount(account);
       employeeService.saveEmployee(employee);
       logger.info("Account added for employee {}", employeeId);
@@ -100,7 +100,11 @@ public class AccountService {
     logger.debug("Getting account of employee {}", employeeId);
     Account account;
     try {
-      account = employeeService.getEmployeeById(employeeId).getAccount();
+      Employee employee = employeeService.getEmployeeById(employeeId);
+      if (null == employee) {
+        throw new NoSuchElementException("Employee with id " + employeeId + " not found");
+      }
+      account = employee.getAccount();
       if (null == account) {
         throw new NoSuchElementException("Account for employee " + employeeId + " not found");
       }

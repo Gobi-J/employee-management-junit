@@ -31,10 +31,10 @@ class EmployeeControllerTest {
 
   @BeforeEach
   void setUp() {
-    MockitoAnnotations.openMocks(this);
-    employeeDto = new EmployeeDto();
-    employeeDto.setId(1);
-    employeeDto.setName("John");
+    employeeDto = EmployeeDto.builder()
+        .id(1)
+        .name("Gobi")
+        .build();
   }
 
   @AfterEach

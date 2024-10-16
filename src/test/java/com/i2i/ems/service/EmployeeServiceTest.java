@@ -67,12 +67,6 @@ public class EmployeeServiceTest {
         .build();
   }
 
-//  @AfterEach
-//  void tearDown() {
-//    employeeDto = null;
-//    employee = null;
-//  }
-
   @Test
   void testSaveEmployeeSuccess() {
     when(employeeRepository.save(any(Employee.class))).thenReturn(employee);

@@ -10,5 +10,3 @@ public class EmployeeManagementApplication {
 		SpringApplication.run(EmployeeManagementApplication.class, args);
 	}
 }
-
-// directly throw e
