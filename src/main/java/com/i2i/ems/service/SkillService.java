@@ -55,19 +55,6 @@ public class SkillService {
 
   /**
    * <p>
-   * Get all skills
-   * </p>
-   *
-   * @return {@link List<SkillDto>} List of all skills
-   */
-  public List<SkillDto> getAllSkills() {
-    return skillRepository.findAll().stream()
-        .map(SkillMapper::modelToDto)
-        .collect(Collectors.toList());
-  }
-
-  /**
-   * <p>
    * Get a skill by id
    * </p>
    *

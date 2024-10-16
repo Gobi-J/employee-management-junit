@@ -2,13 +2,10 @@ package com.i2i.ems.controller;
 
 import com.i2i.ems.dto.EmployeeDto;
 import com.i2i.ems.service.EmployeeService;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -35,11 +32,6 @@ class EmployeeControllerTest {
         .id(1)
         .name("Gobi")
         .build();
-  }
-
-  @AfterEach
-  void tearDown() {
-
   }
 
   @Test

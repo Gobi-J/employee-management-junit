@@ -46,11 +46,11 @@ class RoleControllerTest {
 
   @Test
   void testCreateRole() {
-    when(roleService.addRole(roleDto)).thenReturn(roleDto);
+    when(roleService.addRole(anyInt(), any(RoleDto.class))).thenReturn(roleDto);
     ResponseEntity<RoleDto> response = roleController.createRole(1, roleDto);
     assertEquals(roleDto, response.getBody());
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
-    verify(roleService).addRole(roleDto);
+    verify(roleService).addRole(1, roleDto);
   }
 
   @Test

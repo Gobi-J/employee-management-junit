@@ -52,7 +52,7 @@ public class RoleController {
    */
   @PostMapping
   public ResponseEntity<RoleDto> createRole(@PathVariable int employeeId, @Validated @RequestBody RoleDto roleDto) {
-    return new ResponseEntity<>(roleService.addRole(roleDto), HttpStatus.CREATED);
+    return new ResponseEntity<>(roleService.addRole(employeeId, roleDto), HttpStatus.CREATED);
   }
 
   /**

@@ -50,47 +50,6 @@ public class RoleService {
 
   /**
    * <p>
-   * Adding new role
-   * </p>
-   *
-   * @param roleDto role to be added
-   * @return {@link RoleDto} role with its id
-   */
-  public RoleDto addRole(RoleDto roleDto) {
-    logger.debug("Adding role {}", roleDto.getDesignation());
-    Role role;
-    try {
-      role = saveRole(RoleMapper.dtoToModel(roleDto));
-      logger.info("Role {} added", role.getId());
-    } catch (Exception e) {
-      logger.error(e);
-      throw new EmployeeException("Cannot add role", e);
-    }
-    return RoleMapper.modelToDto(role);
-  }
-
-  /**
-   * <p>
-   * Delete role with given id
-   * </p>
-   *
-   * @param id id of the role to delete
-   */
-  public void deleteRole(int id) {
-    logger.debug("Deleting role {}", id);
-    try {
-      Role role = getRole(id);
-      role.setIsDeleted(true);
-      saveRole(role);
-      logger.info("Role {} deleted", id);
-    } catch (Exception e) {
-      logger.error(e);
-      throw new EmployeeException("Cannot delete role", e);
-    }
-  }
-
-  /**
-   * <p>
    * Retrieves the role of the given id
    * </p>
    *
@@ -105,6 +64,37 @@ public class RoleService {
       logger.error(e);
       throw new EmployeeException("Cannot get role", e);
     }
+  }
+
+  /**
+   * <p>
+   * Adding new role
+   * </p>
+   *
+   * @param roleDto role to be added
+   * @return {@link RoleDto} role with its id
+   */
+  public RoleDto addRole(int employeeId, RoleDto roleDto) {
+    logger.debug("Adding role {}", roleDto.getDesignation());
+    Role role;
+    try {
+      Employee employee = employeeService.getEmployeeById(employeeId);
+      if (null == employee) {
+        throw new NoSuchElementException("Employee " + employeeId + " not found");
+      }
+      role = saveRole(RoleMapper.dtoToModel(roleDto));
+      employee.setRole(role);
+      employeeService.saveEmployee(employee);
+      logger.info("Role {} added", role.getId());
+    } catch (Exception e) {
+      if (e instanceof NoSuchElementException) {
+        logger.warn(e);
+        throw e;
+      }
+      logger.error(e);
+      throw new EmployeeException("Cannot add role", e);
+    }
+    return RoleMapper.modelToDto(role);
   }
 
   /**
@@ -152,7 +142,7 @@ public class RoleService {
       }
       Role role = roleRepository.findByDesignationAndDepartment(roleDto.getDesignation(), roleDto.getDepartment());
       if (null == role) {
-        roleDto = addRole(roleDto);
+        roleDto = addRole(employeeId, roleDto);
         employee.setRole(getRole(roleDto.getId()));
       } else {
         employee.setRole(role);
@@ -168,5 +158,38 @@ public class RoleService {
       throw new EmployeeException("Cannot update role", e);
     }
     return roleDto;
+  }
+
+  /**
+   * <p>
+   * Delete role of given employee id
+   * </p>
+   *
+   * @param id id of the employee whose role to delete
+   */
+  public void deleteRole(int id) {
+    logger.debug("Deleting role {}", id);
+    try {
+      Employee employee = employeeService.getEmployeeById(id);
+      if (null == employee) {
+        throw new NoSuchElementException("Employee " + id + " not found");
+      }
+      Role role = employee.getRole();
+      if (null == role) {
+        throw new NoSuchElementException("Role for employee " + id + " not found");
+      }
+      employee.setRole(null);
+      role.setIsDeleted(true);
+      saveRole(role);
+      employeeService.saveEmployee(employee);
+      logger.info("Role {} deleted", id);
+    } catch (Exception e) {
+      if (e instanceof NoSuchElementException) {
+        logger.warn(e);
+        throw e;
+      }
+      logger.error(e);
+      throw new EmployeeException("Cannot delete role", e);
+    }
   }
 }

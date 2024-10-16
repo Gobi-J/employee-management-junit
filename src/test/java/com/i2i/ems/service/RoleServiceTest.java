@@ -1,19 +1,27 @@
 package com.i2i.ems.service;
 
 import com.i2i.ems.dto.RoleDto;
+import com.i2i.ems.helper.EmployeeException;
 import com.i2i.ems.model.Employee;
 import com.i2i.ems.model.Role;
 import com.i2i.ems.model.Type;
 import com.i2i.ems.repository.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class RoleServiceTest {
 
   private RoleDto roleDto;
@@ -22,6 +30,8 @@ class RoleServiceTest {
 
   @Mock
   private RoleRepository roleRepository;
+  @Mock
+  private EmployeeService employeeService;
   @InjectMocks
   private RoleService roleService;
 
@@ -49,18 +59,111 @@ class RoleServiceTest {
   }
 
   @Test
-  void addRole() {
+  void testAddRoleSuccess() {
+    when(employeeService.getEmployeeById(1)).thenReturn(employee);
+    when(roleRepository.save(any(Role.class))).thenReturn(role);
+    RoleDto result = roleService.addRole(1, roleDto);
+    assertNotNull(result);
+    assertEquals(roleDto.getDesignation(), result.getDesignation());
+    verify(employeeService, times(1)).getEmployeeById(1);
+    verify(roleRepository, times(1)).save(any(Role.class));
   }
 
   @Test
-  void deleteRole() {
+  void testAddRoleEmployeeNotExists() {
+    when(employeeService.getEmployeeById(1)).thenReturn(null);
+    assertThrows(NoSuchElementException.class, () -> roleService.addRole(1, roleDto));
+    verify(employeeService).getEmployeeById(1);
   }
 
   @Test
-  void getEmployeeRole() {
+  void testAddRoleFailure() {
+    when(employeeService.getEmployeeById(anyInt())).thenThrow(new EmployeeException("Error occurred with server"));
+    assertThrows(EmployeeException.class, () -> roleService.addRole(1, roleDto));
+    verify(employeeService).getEmployeeById(1);
   }
 
   @Test
-  void updateRole() {
+  void testGetEmployeeRoleSuccess() {
+    when(employeeService.getEmployeeById(1)).thenReturn(employee);
+    RoleDto result = roleService.getEmployeeRole(1);
+    assertNotNull(result);
+    assertEquals(role.getDesignation(), result.getDesignation());
+    verify(employeeService, times(1)).getEmployeeById(1);
+  }
+
+  @Test
+  void testGetEmployeeRoleNotExists() {
+    employee.setRole(null);
+    when(employeeService.getEmployeeById(1)).thenReturn(employee);
+    assertThrows(NoSuchElementException.class, () -> roleService.getEmployeeRole(1));
+    verify(employeeService, times(1)).getEmployeeById(1);
+    employee.setRole(role);
+  }
+
+  @Test
+  void testGetEmployeeRoleFailure() {
+    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    assertThrows(EmployeeException.class, () -> roleService.getEmployeeRole(1));
+    verify(employeeService, times(1)).getEmployeeById(1);
+  }
+
+  @Test
+  void testUpdateRoleSuccess() {
+    when(employeeService.getEmployeeById(1)).thenReturn(employee);
+    when(roleRepository.findByDesignationAndDepartment(roleDto.getDesignation(), roleDto.getDepartment())).thenReturn(role);
+    RoleDto result = roleService.updateRole(1, roleDto);
+    assertNotNull(result);
+    assertEquals(roleDto.getDesignation(), result.getDesignation());
+    verify(employeeService, times(1)).getEmployeeById(1);
+    verify(roleRepository, times(1)).findByDesignationAndDepartment(roleDto.getDesignation(), roleDto.getDepartment());
+  }
+
+  @Test
+  void testUpdateRoleEmployeeNotExists() {
+    when(employeeService.getEmployeeById(1)).thenReturn(null);
+    assertThrows(NoSuchElementException.class, () -> roleService.updateRole(1, roleDto));
+    verify(employeeService, times(1)).getEmployeeById(1);
+  }
+
+  @Test
+  void testUpdateRoleFailure() {
+    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    assertThrows(EmployeeException.class, () -> roleService.updateRole(1, roleDto));
+    verify(employeeService, times(1)).getEmployeeById(1);
+  }
+
+  @Test
+  void testDeleteRoleSuccess() {
+    when(employeeService.getEmployeeById(1)).thenReturn(employee);
+    when(roleRepository.save(any(Role.class))).thenReturn(role);
+    when(employeeService.saveEmployee(employee)).thenReturn(employee);
+    assertDoesNotThrow(() -> roleService.deleteRole(1));
+    verify(employeeService, times(1)).getEmployeeById(1);
+    verify(roleRepository, times(1)).save(any(Role.class));
+    verify(employeeService, times(1)).saveEmployee(employee);
+  }
+
+  @Test
+  void testDeleteRoleEmployeeNotExists() {
+    when(employeeService.getEmployeeById(1)).thenReturn(null);
+    assertThrows(NoSuchElementException.class, () -> roleService.deleteRole(1));
+    verify(employeeService, times(1)).getEmployeeById(1);
+  }
+
+  @Test
+  void testDeleteRoleRoleNotExists() {
+    employee.setRole(null);
+    when(employeeService.getEmployeeById(1)).thenReturn(employee);
+    assertThrows(NoSuchElementException.class, () -> roleService.deleteRole(1));
+    verify(employeeService, times(1)).getEmployeeById(1);
+    employee.setRole(role);
+  }
+
+  @Test
+  void testDeleteRoleFailure() {
+    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    assertThrows(EmployeeException.class, () -> roleService.deleteRole(1));
+    verify(employeeService, times(1)).getEmployeeById(1);
   }
 }
