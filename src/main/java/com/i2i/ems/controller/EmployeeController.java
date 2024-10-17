@@ -1,13 +1,10 @@
 package com.i2i.ems.controller;
 
 import java.util.List;
-import java.security.Principal;
 
-import com.i2i.ems.helper.EmployeeException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.i2i.ems.dto.EmployeeDto;
+import com.i2i.ems.helper.EmployeeException;
 import com.i2i.ems.helper.ForbiddenException;
 import com.i2i.ems.service.EmployeeService;
 

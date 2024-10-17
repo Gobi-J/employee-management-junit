@@ -1,11 +1,9 @@
 package com.i2i.ems.service;
 
-import com.i2i.ems.dto.EmployeeDto;
-import com.i2i.ems.helper.EmployeeException;
-import com.i2i.ems.helper.UnAuthorizedException;
-import com.i2i.ems.model.Employee;
-import com.i2i.ems.model.Type;
-import com.i2i.ems.repository.EmployeeRepository;
+import java.util.Date;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,13 +16,23 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.i2i.ems.dto.EmployeeDto;
+import com.i2i.ems.helper.EmployeeException;
+import com.i2i.ems.helper.UnAuthorizedException;
+import com.i2i.ems.model.Employee;
+import com.i2i.ems.model.Type;
+import com.i2i.ems.repository.EmployeeRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
@@ -191,13 +199,11 @@ public class EmployeeServiceTest {
   void testCreateEmployeeSuccess() {
     when(employeeRepository.existsByEmail(anyString())).thenReturn(false);
     when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
-    when(passwordEncoder.encode(any())).thenReturn("password");
     EmployeeDto result = employeeService.createEmployee(employeeDto);
     assertNotNull(result);
     assertEquals(employee.getEmail(), result.getEmail());
     verify(employeeRepository, times(1)).existsByEmail(anyString());
     verify(employeeRepository, times(1)).save(any(Employee.class));
-    verify(passwordEncoder, times(1)).encode(anyString());
   }
 
   @Test

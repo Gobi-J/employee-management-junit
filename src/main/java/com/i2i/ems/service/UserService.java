@@ -1,5 +1,6 @@
 package com.i2i.ems.service;
 
+import com.i2i.ems.helper.EmployeeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,10 +31,18 @@ public class UserService implements UserDetailsService {
    * @throws UsernameNotFoundException If user is not found.
    */
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Employee employee = employeeRepository.findByEmail(username);
-    if (employee == null) {
-      throw new UsernameNotFoundException("User not found");
+  public UserDetails loadUserByUsername(String username) {
+    Employee employee;
+    try {
+      employee = employeeRepository.findByEmail(username);
+      if (employee == null) {
+        throw new UsernameNotFoundException("User not found");
+      }
+    } catch (Exception e) {
+      if (e instanceof UsernameNotFoundException) {
+        throw e;
+      }
+      throw new EmployeeException("Cannot fetch user details");
     }
     return employee;
   }

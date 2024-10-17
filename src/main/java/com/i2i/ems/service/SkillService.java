@@ -4,16 +4,17 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import lombok.NonNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.i2i.ems.dto.SkillDto;
+import com.i2i.ems.helper.EmployeeException;
 import com.i2i.ems.mapper.SkillMapper;
 import com.i2i.ems.model.Employee;
 import com.i2i.ems.model.Skill;
 import com.i2i.ems.repository.SkillRepository;
-
-import lombok.NonNull;
 
 /**
  * <p>
@@ -29,8 +30,20 @@ public class SkillService {
   @Autowired
   private EmployeeService employeeService;
 
+  /**
+   * <p>
+   * Save a skill
+   * </p>
+   *
+   * @param skill Details of the skill to be saved
+   * @return {@link Skill} Details of the skill saved
+   */
   public Skill saveSkill(Skill skill) {
-    return skillRepository.save(skill);
+    try {
+      return skillRepository.save(skill);
+    } catch (Exception e) {
+      throw new EmployeeException("Skill not saved");
+    }
   }
 
   /**
@@ -43,14 +56,18 @@ public class SkillService {
    * @return {@link SkillDto} Details of the skill added
    */
   public SkillDto addSkill(SkillDto skillDto, int employeeId) {
-    Skill skill = SkillMapper.dtoToModel(skillDto);
-    if (skillRepository.existsByName(skillDto.getName())) {
-      skill = skillRepository.findByName(skillDto.getName());
+    try {
+      Skill skill = SkillMapper.dtoToModel(skillDto);
+      if (skillRepository.existsByName(skillDto.getName())) {
+        skill = skillRepository.findByName(skillDto.getName());
+      }
+      Employee employee = employeeService.getEmployeeById(employeeId);
+      employee.getSkills().add(skill);
+      employeeService.saveEmployee(employee);
+      return SkillMapper.modelToDto(skill);
+    } catch (Exception e) {
+      throw new EmployeeException("Skill not added");
     }
-    Employee employee = employeeService.getEmployeeById(employeeId);
-    employee.getSkills().add(skill);
-    employeeService.saveEmployee(employee);
-    return SkillMapper.modelToDto(skill);
   }
 
   /**
@@ -62,7 +79,11 @@ public class SkillService {
    * @return {@link Skill} Details of the skill fetched
    */
   public Skill getSkillById(int id) {
-    return skillRepository.findByIdAndIsDeletedFalse(id);
+    try {
+      return skillRepository.findByIdAndIsDeletedFalse(id);
+    } catch (Exception e) {
+      throw new EmployeeException("Skill not found");
+    }
   }
 
   /**
@@ -74,10 +95,14 @@ public class SkillService {
    * @return {@link List<SkillDto>} List of all skills of the employee
    */
   public List<SkillDto> getEmployeeSkills(int employeeId) {
-    Employee employee = employeeService.getEmployeeById(employeeId);
-    return employee.getSkills().stream()
-        .map(SkillMapper::modelToDto)
-        .collect(Collectors.toList());
+    try {
+      Employee employee = employeeService.getEmployeeById(employeeId);
+      return employee.getSkills().stream()
+          .map(SkillMapper::modelToDto)
+          .collect(Collectors.toList());
+    } catch (Exception e) {
+      throw new EmployeeException("Skills not found");
+    }
   }
 
   /**
@@ -94,7 +119,8 @@ public class SkillService {
       throw new NoSuchElementException("Skill not found");
     }
     skill = SkillMapper.dtoToModel(skillDto);
-    return SkillMapper.modelToDto(saveSkill(skill));
+    skill = saveSkill(skill);
+    return SkillMapper.modelToDto(skill);
   }
 
   /**
@@ -104,12 +130,12 @@ public class SkillService {
    *
    * @param employeeId id of the employee whose skill is to be deleted
    */
-  public void deleteSkill(int employeeId) {
+  public void deleteSkills(int employeeId) {
     Employee employee = employeeService.getEmployeeById(employeeId);
     if (null == employee) {
       throw new NoSuchElementException("Employee " + employeeId + " not found");
     }
-    if (employee.getSkills().isEmpty()) {
+    if (null == employee.getSkills()) {
       throw new NoSuchElementException("Employee " + employeeId + " has no skills");
     }
     employee.setSkills(null);

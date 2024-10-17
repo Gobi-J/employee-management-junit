@@ -1,11 +1,8 @@
 package com.i2i.ems.service;
 
-import com.i2i.ems.dto.AccountDto;
-import com.i2i.ems.helper.EmployeeException;
-import com.i2i.ems.model.Account;
-import com.i2i.ems.model.Employee;
-import com.i2i.ems.model.Type;
-import com.i2i.ems.repository.AccountRepository;
+import java.util.Date;
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,13 +11,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DuplicateKeyException;
 
-import java.util.Date;
-import java.util.NoSuchElementException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.i2i.ems.dto.AccountDto;
+import com.i2i.ems.helper.EmployeeException;
+import com.i2i.ems.model.Account;
+import com.i2i.ems.model.Employee;
+import com.i2i.ems.model.Type;
+import com.i2i.ems.repository.AccountRepository;
 
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
@@ -94,7 +99,6 @@ class AccountServiceTest {
     verify(accountRepository, times(1)).save(any(Account.class));
     verify(employeeService, times(1)).getEmployeeById(10);
     verify(employeeService, times(1)).saveEmployee(employee);
-    employee.setAccount(account);
   }
 
   @Test
@@ -134,7 +138,6 @@ class AccountServiceTest {
     when(employeeService.getEmployeeById(1)).thenReturn(employee);
     assertThrows(NoSuchElementException.class, () -> accountService.getEmployeeAccount(1));
     verify(employeeService, times(1)).getEmployeeById(1);
-    employee.setAccount(account);
   }
 
   @Test
@@ -164,7 +167,6 @@ class AccountServiceTest {
     when(employeeService.getEmployeeById(1)).thenReturn(employee);
     assertThrows(NoSuchElementException.class, () -> accountService.updateAccount(1, accountDto));
     verify(employeeService, times(1)).getEmployeeById(1);
-    employee.setAccount(account);
   }
 
   @Test
@@ -198,7 +200,6 @@ class AccountServiceTest {
     when(employeeService.getEmployeeById(1)).thenReturn(employee);
     assertThrows(NoSuchElementException.class, () -> accountService.removeAccount(1));
     verify(employeeService, times(1)).getEmployeeById(1);
-    employee.setAccount(account);
   }
 
   @Test

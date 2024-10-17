@@ -1,11 +1,8 @@
 package com.i2i.ems.service;
 
-import com.i2i.ems.dto.RoleDto;
-import com.i2i.ems.helper.EmployeeException;
-import com.i2i.ems.model.Employee;
-import com.i2i.ems.model.Role;
-import com.i2i.ems.model.Type;
-import com.i2i.ems.repository.RoleRepository;
+import java.util.Date;
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,13 +10,22 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Date;
-import java.util.NoSuchElementException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.i2i.ems.dto.RoleDto;
+import com.i2i.ems.helper.EmployeeException;
+import com.i2i.ems.model.Employee;
+import com.i2i.ems.model.Role;
+import com.i2i.ems.model.Type;
+import com.i2i.ems.repository.RoleRepository;
 
 @ExtendWith(MockitoExtension.class)
 class RoleServiceTest {
@@ -98,7 +104,6 @@ class RoleServiceTest {
     when(employeeService.getEmployeeById(1)).thenReturn(employee);
     assertThrows(NoSuchElementException.class, () -> roleService.getEmployeeRole(1));
     verify(employeeService, times(1)).getEmployeeById(1);
-    employee.setRole(role);
   }
 
   @Test
@@ -157,7 +162,6 @@ class RoleServiceTest {
     when(employeeService.getEmployeeById(1)).thenReturn(employee);
     assertThrows(NoSuchElementException.class, () -> roleService.deleteRole(1));
     verify(employeeService, times(1)).getEmployeeById(1);
-    employee.setRole(role);
   }
 
   @Test

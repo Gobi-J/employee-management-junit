@@ -1,7 +1,5 @@
 package com.i2i.ems.controller;
 
-import com.i2i.ems.dto.RoleDto;
-import com.i2i.ems.service.RoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,11 +9,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import com.i2i.ems.dto.RoleDto;
+import com.i2i.ems.service.RoleService;
 
 @ExtendWith(MockitoExtension.class)
 class RoleControllerTest {

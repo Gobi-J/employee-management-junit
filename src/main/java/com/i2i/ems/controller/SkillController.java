@@ -94,7 +94,7 @@ public class SkillController {
    */
   @DeleteMapping
   public ResponseEntity<HttpStatus> deleteSkills(@PathVariable int employeeId) {
-    skillService.deleteSkill(employeeId);
+    skillService.deleteSkills(employeeId);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 

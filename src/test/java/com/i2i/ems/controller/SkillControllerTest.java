@@ -1,9 +1,7 @@
 package com.i2i.ems.controller;
 
-import com.i2i.ems.dto.SkillDto;
-import com.i2i.ems.model.Skill;
-import com.i2i.ems.service.SkillService;
-import org.hibernate.mapping.Any;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,13 +11,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import com.i2i.ems.dto.SkillDto;
+import com.i2i.ems.model.Skill;
+import com.i2i.ems.service.SkillService;
 
 @ExtendWith(MockitoExtension.class)
 class SkillControllerTest {
@@ -91,6 +91,6 @@ class SkillControllerTest {
   @Test
   void testDeleteSkills() {
     assertEquals(HttpStatus.NO_CONTENT, skillController.deleteSkills(1).getStatusCode());
-    verify(skillService).deleteSkill(1);
+    verify(skillService).deleteSkills(1);
   }
 }
