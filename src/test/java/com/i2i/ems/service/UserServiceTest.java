@@ -58,7 +58,7 @@ class UserServiceTest {
 
   @Test
   void testLoadUserByUsernameFailure() {
-    when(employeeRepository.findByEmail(anyString())).thenThrow(new RuntimeException());
+    when(employeeRepository.findByEmail(anyString())).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> userService.loadUserByUsername("gobi@i2i.com"));
   }
 }

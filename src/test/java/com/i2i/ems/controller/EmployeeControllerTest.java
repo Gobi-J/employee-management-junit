@@ -12,10 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,10 +26,10 @@ import com.i2i.ems.service.EmployeeService;
 @ExtendWith(MockitoExtension.class)
 class EmployeeControllerTest {
 
+  private EmployeeDto employeeDto;
+
   @Mock
   private EmployeeService employeeService;
-
-  private EmployeeDto employeeDto;
 
   @InjectMocks
   private EmployeeController employeeController;
@@ -82,6 +82,7 @@ class EmployeeControllerTest {
 
   @Test
   void testDeleteEmployee() {
+    doNothing().when(employeeService).deleteEmployee(anyInt());
     ResponseEntity<HttpStatus> response = employeeController.deleteEmployee(1);
     assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     verify(employeeService, times(1)).deleteEmployee(1);
@@ -98,7 +99,7 @@ class EmployeeControllerTest {
 
   @Test
   void testLoginUser() {
-    when(employeeService.createSession(any(EmployeeDto.class))).thenReturn("String.valueOf(String.class)");
+    when(employeeService.createSession(any(EmployeeDto.class))).thenReturn("token");
     ResponseEntity<HttpStatus> response = employeeController.loginUser(employeeDto);
     assertEquals(HttpStatus.OK, response.getStatusCode());
     verify(employeeService, times(1)).createSession(any(EmployeeDto.class));

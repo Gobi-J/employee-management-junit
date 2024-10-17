@@ -81,7 +81,7 @@ class SkillServiceTest {
 
   @Test
   void testSaveSkillFailure() {
-    when(skillRepository.save(skill)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(skillRepository.save(skill)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> skillService.saveSkill(skill));
     verify(skillRepository).save(skill);
   }
@@ -117,7 +117,7 @@ class SkillServiceTest {
 
   @Test
   void testAddSkillFailure() {
-    when(skillRepository.existsByName(skillDto.getName())).thenThrow(new EmployeeException("Error occurred with server"));
+    when(skillRepository.existsByName(skillDto.getName())).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> skillService.addSkill(skillDto, 1));
     verify(skillRepository, times(1)).existsByName(skillDto.getName());
   }
@@ -131,7 +131,7 @@ class SkillServiceTest {
 
   @Test
   void testGetSkillByIdFailure() {
-    when(skillRepository.findByIdAndIsDeletedFalse(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(skillRepository.findByIdAndIsDeletedFalse(1)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> skillService.getSkillById(1));
     verify(skillRepository).findByIdAndIsDeletedFalse(1);
   }
@@ -147,7 +147,7 @@ class SkillServiceTest {
 
   @Test
   void testGetEmployeeSkillsFailure() {
-    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeService.getEmployeeById(1)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> skillService.getEmployeeSkills(1));
     verify(employeeService, times(1)).getEmployeeById(1);
   }
@@ -167,7 +167,7 @@ class SkillServiceTest {
 
   @Test
   void testUpdateSkillFailure() {
-    when(skillRepository.findByIdAndIsDeletedFalse(skillDto.getId())).thenThrow(new EmployeeException("Error occurred with server"));
+    when(skillRepository.findByIdAndIsDeletedFalse(skillDto.getId())).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> skillService.updateSkill(skillDto));
     verify(skillRepository).findByIdAndIsDeletedFalse(skillDto.getId());
   }
@@ -198,7 +198,7 @@ class SkillServiceTest {
 
   @Test
   void testDeleteSkillsFailure() {
-    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeService.getEmployeeById(1)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> skillService.deleteSkills(1));
     verify(employeeService, times(1)).getEmployeeById(1);
   }

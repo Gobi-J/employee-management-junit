@@ -81,7 +81,7 @@ class AccountServiceTest {
 
   @Test
   void testSaveAccountFailure() {
-    when(accountRepository.save(account)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(accountRepository.save(account)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> accountService.saveAccount(account));
     verify(accountRepository, times(1)).save(account);
   }
@@ -110,7 +110,7 @@ class AccountServiceTest {
 
   @Test
   void testAddAccountFailure() {
-    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeService.getEmployeeById(1)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> accountService.addAccount(1, accountDto));
     verify(employeeService, times(1)).getEmployeeById(1);
   }
@@ -142,7 +142,7 @@ class AccountServiceTest {
 
   @Test
   void testGetEmployeeAccountFailure() {
-    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeService.getEmployeeById(1)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> accountService.getEmployeeAccount(1));
     verify(employeeService, times(1)).getEmployeeById(1);
   }
@@ -171,7 +171,7 @@ class AccountServiceTest {
 
   @Test
   void testUpdateAccountFailure() {
-    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeService.getEmployeeById(1)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> accountService.updateAccount(1, accountDto));
     verify(employeeService, times(1)).getEmployeeById(1);
   }
@@ -204,7 +204,7 @@ class AccountServiceTest {
 
   @Test
   void testRemoveAccountFailure() {
-    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeService.getEmployeeById(1)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> accountService.removeAccount(1));
     verify(employeeService, times(1)).getEmployeeById(1);
   }

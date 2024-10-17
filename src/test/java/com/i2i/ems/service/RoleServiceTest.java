@@ -36,8 +36,10 @@ class RoleServiceTest {
 
   @Mock
   private RoleRepository roleRepository;
+
   @Mock
   private EmployeeService employeeService;
+
   @InjectMocks
   private RoleService roleService;
 
@@ -84,7 +86,7 @@ class RoleServiceTest {
 
   @Test
   void testAddRoleFailure() {
-    when(employeeService.getEmployeeById(anyInt())).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeService.getEmployeeById(anyInt())).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> roleService.addRole(1, roleDto));
     verify(employeeService).getEmployeeById(1);
   }
@@ -108,7 +110,7 @@ class RoleServiceTest {
 
   @Test
   void testGetEmployeeRoleFailure() {
-    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeService.getEmployeeById(1)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> roleService.getEmployeeRole(1));
     verify(employeeService, times(1)).getEmployeeById(1);
   }
@@ -133,7 +135,7 @@ class RoleServiceTest {
 
   @Test
   void testUpdateRoleFailure() {
-    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeService.getEmployeeById(1)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> roleService.updateRole(1, roleDto));
     verify(employeeService, times(1)).getEmployeeById(1);
   }
@@ -166,7 +168,7 @@ class RoleServiceTest {
 
   @Test
   void testDeleteRoleFailure() {
-    when(employeeService.getEmployeeById(1)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeService.getEmployeeById(1)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> roleService.deleteRole(1));
     verify(employeeService, times(1)).getEmployeeById(1);
   }

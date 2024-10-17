@@ -21,10 +21,10 @@ import com.i2i.ems.service.AccountService;
 @ExtendWith(MockitoExtension.class)
 class AccountControllerTest {
 
+  private AccountDto accountDto;
+
   @Mock
   private AccountService accountService;
-
-  private AccountDto accountDto;
 
   @InjectMocks
   private AccountController accountController;

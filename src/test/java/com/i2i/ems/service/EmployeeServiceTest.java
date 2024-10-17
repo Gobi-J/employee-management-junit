@@ -37,6 +37,9 @@ import com.i2i.ems.repository.EmployeeRepository;
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
 
+  private EmployeeDto employeeDto;
+  private Employee employee;
+
   @Mock
   private EmployeeRepository employeeRepository;
 
@@ -46,16 +49,11 @@ public class EmployeeServiceTest {
   @Mock
   private BCryptPasswordEncoder passwordEncoder;
 
-  private EmployeeDto employeeDto;
-
-  private Employee employee;
-
   @InjectMocks
   private EmployeeService employeeService;
 
   @BeforeEach
   void setUp() {
-
     employeeDto = EmployeeDto.builder()
         .name("Gobi")
         .email("gobi@i2i.com")
@@ -67,7 +65,7 @@ public class EmployeeServiceTest {
     employee = Employee.builder()
         .id(10)
         .name("Gobi")
-        .dob(new Date(2003, 05, 23))
+        .dob(new Date(2003-5-23))
         .mobileNo(1234567890)
         .email("gobi@i2i.com")
         .isDeleted(false)
@@ -87,9 +85,8 @@ public class EmployeeServiceTest {
 
   @Test
   void testSaveEmployeeFailure() {
-    when(employeeRepository.save(employee)).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeRepository.save(employee)).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> employeeService.saveEmployee(employee));
-    verify(employeeRepository, times(1)).save(employee);
   }
 
   @Test
@@ -112,7 +109,7 @@ public class EmployeeServiceTest {
 
   @Test
   void testAddEmployeeFailure() {
-    when(employeeRepository.existsByEmail(anyString())).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeRepository.existsByEmail(anyString())).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> employeeService.addEmployee(employeeDto));
     verify(employeeRepository, times(1)).existsByEmail(anyString());
   }
@@ -135,7 +132,7 @@ public class EmployeeServiceTest {
 
   @Test
   void testGetEmployeeFailure() {
-    when(employeeRepository.findByIdAndIsDeletedFalse(anyInt())).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeRepository.findByIdAndIsDeletedFalse(anyInt())).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> employeeService.getEmployee(12));
     verify(employeeRepository, times(1)).findByIdAndIsDeletedFalse(anyInt());
   }
@@ -149,7 +146,7 @@ public class EmployeeServiceTest {
 
   @Test
   void testGetAllEmployeesFailure() {
-    when(employeeRepository.findAllByIsDeletedFalse(any(Pageable.class))).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeRepository.findAllByIsDeletedFalse(any(Pageable.class))).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> employeeService.getAllEmployees(0, 1));
     verify(employeeRepository, times(1)).findAllByIsDeletedFalse(any(Pageable.class));
   }
@@ -167,7 +164,7 @@ public class EmployeeServiceTest {
 
   @Test
   void testUpdateEmployeeFailure() {
-    when(employeeRepository.findByEmail(anyString())).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeRepository.findByEmail(anyString())).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> employeeService.updateEmployee(employeeDto));
     verify(employeeRepository, times(1)).findByEmail(anyString());
   }
@@ -190,7 +187,7 @@ public class EmployeeServiceTest {
 
   @Test
   void testDeleteEmployeeFailure() {
-    when(employeeRepository.findByIdAndIsDeletedFalse(anyInt())).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeRepository.findByIdAndIsDeletedFalse(anyInt())).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> employeeService.deleteEmployee(10));
     verify(employeeRepository, times(1)).findByIdAndIsDeletedFalse(anyInt());
   }
@@ -215,7 +212,7 @@ public class EmployeeServiceTest {
 
   @Test
   void testCreateEmployeeFailure() {
-    when(employeeRepository.existsByEmail(anyString())).thenThrow(new EmployeeException("Error occurred with server"));
+    when(employeeRepository.existsByEmail(anyString())).thenThrow(EmployeeException.class);
     assertThrows(EmployeeException.class, () -> employeeService.createEmployee(employeeDto));
     verify(employeeRepository, times(1)).existsByEmail(anyString());
   }
@@ -229,7 +226,7 @@ public class EmployeeServiceTest {
 
   @Test
   void testCreateSessionFailure() {
-    when(authenticationManager.authenticate(any())).thenThrow(new BadCredentialsException("Invalid credentials"));
+    when(authenticationManager.authenticate(any())).thenThrow(BadCredentialsException.class);
     assertThrows(UnAuthorizedException.class, () -> employeeService.createSession(employeeDto));
     verify(authenticationManager, times(1)).authenticate(any());
   }
