@@ -27,12 +27,6 @@ import com.i2i.ems.model.Employee;
 import com.i2i.ems.model.Type;
 import com.i2i.ems.repository.AccountRepository;
 
-/**
- * <p>
- *   Test cases for account service
- * </p>
- *
- */
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
 
