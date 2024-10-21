@@ -2,6 +2,7 @@ package com.i2i.ems.service;
 
 import java.util.NoSuchElementException;
 
+import lombok.NonNull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,13 +69,14 @@ public class RoleService {
 
   /**
    * <p>
-   * Adding new role
+   * Adding new role for an employee
    * </p>
    *
-   * @param roleDto role to be added
+   * @param employeeId who needs to add new role
+   * @param roleDto role details to be added
    * @return {@link RoleDto} role with its id
    */
-  public RoleDto addRole(int employeeId, RoleDto roleDto) {
+  public RoleDto addRole(int employeeId, @NonNull RoleDto roleDto) {
     logger.debug("Adding role {}", roleDto.getDesignation());
     Role role;
     try {
@@ -133,7 +135,7 @@ public class RoleService {
    * @param roleDto    new role details
    * @return {@link RoleDto} updated role details
    */
-  public RoleDto updateRole(int employeeId, RoleDto roleDto) {
+  public RoleDto updateRole(int employeeId, @NonNull RoleDto roleDto) {
     logger.debug("Updating role {} of an employee ", employeeId);
     try {
       Employee employee = employeeService.getEmployeeById(employeeId);

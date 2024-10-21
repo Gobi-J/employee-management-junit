@@ -63,7 +63,7 @@ class SkillServiceTest {
     employee = Employee.builder()
         .id(1)
         .name("Gobi")
-        .dob(new Date(2003, 05, 23))
+        .dob(new Date(2003-5-23))
         .mobileNo(1234567890)
         .email("gobi@i2i.com")
         .isDeleted(false)
